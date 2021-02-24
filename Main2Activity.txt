@@ -1,0 +1,79 @@
+package com.example.immortals.attendancemanager;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class Main2Activity extends AppCompatActivity implements ExDialog.ExDialogListener {
+    ArrayList<infovalues> arraylist;
+    customAdapter adapter;
+    ListView lv;
+    static TextView v, v1,v8;
+    String total, cri;
+    String present;
+    public static double c;
+
+
+    public void sub(View view) {
+        opendialog();
+    }
+
+    public void opendialog() {
+        ExDialog e = new ExDialog();
+        e.show(getSupportFragmentManager(), "dialog");
+
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        v1 = (TextView) findViewById((R.id.textView8));
+
+		// getting the criteria of attendance that the user has specified.
+        cri = getIntent().getStringExtra("criteria");
+		
+		//setting and showing it to textview v1
+        v1.setText(cri + "%");
+		
+		//converting it to double
+        c = Double.parseDouble(cri);
+        c = Math.round(c * 100.0) / 100.0;
+        v = (TextView) findViewById((R.id.textView7));
+        v8=(TextView)findViewById(R.id.oo);
+
+
+        String c3 = DateFormat.getDateInstance().format(new Date());
+        v.setText(c3);
+        lv = (ListView) findViewById(R.id.listview1);
+        arraylist = new ArrayList<>();
+        adapter = new customAdapter(this, arraylist);
+        lv.setAdapter(adapter);
+
+    }
+    public void applyText(String sub, String total, String present) {
+        arraylist.add(new infovalues(sub,total,present));
+        this.total=total;
+        this.present=present;
+
+
+        adapter.notifyDataSetChanged();
+
+    }
+    public static double getc(){
+        return c;
+    }
+    public static TextView getT(){
+        return v8;
+    }
+
+}

@@ -1,0 +1,26 @@
+package com.example.immortals.attendancemanager;
+
+public class infovalues {
+    String sub;
+    String total;
+    String present;
+
+    infovalues(String sub, String total, String present)
+    {
+        this.sub=sub;
+        this.total=total;
+        this.present=present;
+    }
+    public String getsub()
+    {
+        return sub;
+    }
+    public String gettotal()
+    {
+        return total;
+    }
+    public String getpresent()
+    {
+        return present;
+    }
+}

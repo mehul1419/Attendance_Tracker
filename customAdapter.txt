@@ -1,0 +1,144 @@
+package com.example.immortals.attendancemanager;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class customAdapter extends ArrayAdapter<infovalues>{
+    private View convertView;
+    String sub,total,present;
+    double percentage,c,overall_percentage;
+    String ab="Status: Great You are on track !";
+    String ba="Status: Attend Classes to match up your Attendance Criteria";
+     int p=0,t=0,pall=0,tall=0;
+    Context mcontext;
+    List<infovalues> i=new ArrayList<>();
+
+
+    public customAdapter(Context context, ArrayList<infovalues> records)
+    {
+        super(context,0,records);
+        mcontext=context;
+        i=records;
+
+    }
+
+    public View getView(final int position, View convertView, ViewGroup parent)
+    {
+
+        infovalues item=i.get(position);
+        if(convertView==null)
+        {
+            convertView= LayoutInflater.from(getContext()).inflate(R.layout.listlayout,parent,false);
+
+        }
+        final TextView v3=(TextView)convertView.findViewById(R.id.id3) ;
+        final TextView v4=(TextView)convertView.findViewById(R.id.textView15);
+        final TextView v5=(TextView)convertView.findViewById(R.id.text2);
+
+        final TextView v2=(TextView)convertView.findViewById(R.id.textView11);
+        final TextView v15=Main2Activity.getT();
+		
+		//getting subject name,no. of present classes, no. of total classes
+        sub=item.getsub();
+        present=item.getpresent();
+        total=item.gettotal();
+        c=Main2Activity.getc();
+        t=Integer.parseInt(total);
+        p=Integer.parseInt(present);
+		
+		//calculating percentage
+        percentage=p*100.0/t;
+        percentage=Math.round(percentage*100.0)/100.0;
+
+		/* if percentage is greater than the criteria, we show "Status: Great You are on track !" else "Status: Attend Classes to match up your Attendance Criteria" */
+        if(percentage>=c) {
+            v3.setText(ab);
+        }
+        else
+            v3.setText(ba);
+
+        v2.setText(String.valueOf(p)+"/"+String.valueOf(t));
+        v4.setText(String.valueOf(percentage)+"%");
+        v5.setText(sub);
+        Button b1=(Button) convertView.findViewById(R.id.add1);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infovalues item=i.get(position);
+				
+				
+				//if user click "+" button-> add total+1 and present+1
+                t=Integer.parseInt(item.total);
+                p=Integer.parseInt(item.present);
+                p++;t++;
+                item.present=String.valueOf(p);
+                item.total=String.valueOf(t);
+				
+				//new percentage of that class will be present*100/total
+                percentage=p*100.0/t;
+                percentage=Math.round(percentage*100.0)/100.0;
+
+      
+				/* if percentage is greater than the criteria, we show "Status: Great You are on track !" else "Status: Attend Classes to match up your Attendance Criteria" */
+                if(percentage>=c)
+                    v3.setText(ab);
+
+
+                else
+                    v3.setText(ba);
+
+
+                v2.setText(String.valueOf(p)+"/"+String.valueOf(t));
+                v4.setText(String.valueOf(percentage)+"%");
+            }
+
+
+        });
+        Button b2=(Button) convertView.findViewById(R.id.sub1);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+			
+			
+			// if user click "-" button, then we add 1 to total but present will remain same.
+                infovalues item=i.get(position);
+                t=Integer.parseInt(item.total);
+                p=Integer.parseInt(item.present);
+                t++;
+                item.present=String.valueOf(p);
+                item.total=String.valueOf(t);
+				
+				//calculating percentage again
+                percentage=p*100.0/t;
+                percentage=Math.round(percentage*100.0)/100.0;
+
+                
+				/* if percentage is greater than the criteria, we show "Status: Great You are on track !" else "Status: Attend Classes to match up your Attendance Criteria" */
+                if(percentage>=c)
+                    v3.setText(ab);
+                else
+                    v3.setText(ba);
+
+                v2.setText(String.valueOf(p)+"/"+String.valueOf(t));
+                v4.setText(String.valueOf(percentage)+"%");
+            }
+        });
+
+        return convertView;
+
+    }
+
+
+}
+
+
